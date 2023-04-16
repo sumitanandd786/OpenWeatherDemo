@@ -11,8 +11,7 @@ import com.openweatherdemo.domain.usecase.SearchCitiesUseCase
 import com.openweatherdemo.ui.search.SearchViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Single
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers.mainThread
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
@@ -42,7 +41,7 @@ class SearchViewModel @Inject internal constructor(
             pref.edit().putString(Constants.Coords.LON, coordEntity.lon.toString()).apply()
             it.onSuccess("")
         }
-            .observeOn(mainThread())
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
     }
 }

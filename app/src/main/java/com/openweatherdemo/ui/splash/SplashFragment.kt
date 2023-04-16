@@ -1,6 +1,8 @@
 package com.openweatherdemo.ui.splash
 
 import android.graphics.Color
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import androidx.navigation.fragment.findNavController
 import com.openweatherdemo.core.BaseFragment
 import com.openweatherdemo.core.Constants
@@ -9,10 +11,16 @@ import com.openweatherdemo.ui.splash.SplashFragmentViewModel
 import com.openweatherdemo.utils.extensions.hide
 import com.openweatherdemo.utils.extensions.show
 import com.mikhaellopez.rxanimation.*
+import com.mikhaellopez.rxanimation.RxAnimation.sequentially
+import com.mikhaellopez.rxanimation.RxAnimation.together
 import dagger.hilt.android.AndroidEntryPoint
+import io.reactivex.Observable
+import io.reactivex.Scheduler
+import io.reactivex.android.plugins.RxAndroidPlugins
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxjava3.disposables.Disposable
-import io.reactivex.rxjava3.kotlin.addTo
+import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.processNextEventInCurrentThread
 
 @AndroidEntryPoint
 class SplashFragment : BaseFragment<SplashFragmentViewModel, FragmentSplashBinding>(
@@ -45,57 +53,79 @@ class SplashFragment : BaseFragment<SplashFragmentViewModel, FragmentSplashBindi
         }
     }
 
+
     private fun startSplashAnimation(navigateToDashboard: Boolean) {
         disposable.add(
-            RxAnimation.sequentially(
-                RxAnimation.together(
-                    binding.imageViewBottomDrawable.translationY(500f),
-                    binding.imageViewEllipse.fadeOut(0L),
-                    binding.imageViewBottomDrawable.fadeOut(0L),
-                    binding.imageViewBigCloud.translationX(-500F, 0L),
-                    binding.imageViewSmallCloud.translationX(500f, 0L),
-                    binding.imageViewBottomDrawableShadow.translationY(500f),
-                    binding.imageViewMainCloud.fadeOut(0L),
-                    binding.buttonExplore.fadeOut(0L),
-                    binding.imageViewBottomDrawableShadow.fadeOut(0L)
-                ), RxAnimation.together(
-                    binding.imageViewBottomDrawable.fadeIn(1000L),
-                    binding.imageViewBottomDrawable.translationY(-1f),
-                    binding.imageViewBottomDrawableShadow.fadeIn(1250L),
-                    binding.imageViewBottomDrawableShadow.translationY(-1f)
-                ), RxAnimation.together(
-                    binding.imageViewEllipse.fadeIn(1000L),
-                    binding.imageViewEllipse.translationY(-50F, 1000L)
-                ), RxAnimation.together(
-                    binding.imageViewBigCloud.translationX(-15f, 1000L),
-                    binding.imageViewSmallCloud.translationX(25f, 1000L)
-                ), binding.imageViewMainCloud.fadeIn(500L), binding.buttonExplore.fadeIn(1000L)
-
-            ).doOnTerminate {
+            Observable.fromCallable {
                 findNavController().graph.setStartDestination(com.openweatherdemo.R.id.dashboardFragment) // Little bit tricky solution :)
                 if (navigateToDashboard) {
                     endSplashAnimation(navigateToDashboard)
                 }
-            }.subscribe()
+            }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe()
+            //  RxAnimation.sequentially(
+            /*together(
+                binding.imageViewBottomDrawable.translationY(500f),
+                binding.imageViewEllipse.fadeOut(0L),
+                binding.imageViewBottomDrawable.fadeOut(0L),
+                binding.imageViewBigCloud.translationX(-500F, 0L),
+                binding.imageViewSmallCloud.translationX(500f, 0L),
+                binding.imageViewBottomDrawableShadow.translationY(500f),
+                binding.imageViewMainCloud.fadeOut(0L),
+                binding.buttonExplore.fadeOut(0L),
+                binding.imageViewBottomDrawableShadow.fadeOut(0L)
+            ), together(
+                binding.imageViewBottomDrawable.fadeIn(1000L),
+                binding.imageViewBottomDrawable.translationY(-1f),
+                binding.imageViewBottomDrawableShadow.fadeIn(1250L),
+                binding.imageViewBottomDrawableShadow.translationY(-1f)
+            ), together(
+                binding.imageViewEllipse.fadeIn(1000L),
+                binding.imageViewEllipse.translationY(-50F, 1000L)
+            ), together(
+                binding.imageViewBigCloud.translationX(-15f, 1000L),
+                binding.imageViewSmallCloud.translationX(25f, 1000L)
+            ), */
+            // binding.imageViewMainCloud.fadeIn(500L), binding.buttonExplore.fadeIn(1000L)
+
+            /*).doOnTerminate {
+                findNavController().graph.setStartDestination(com.openweatherdemo.R.id.dashboardFragment) // Little bit tricky solution :)
+                if (navigateToDashboard) {
+                    endSplashAnimation(navigateToDashboard)
+                }
+            }.subscribe()*/
         )
     }
 
     private fun endSplashAnimation(navigateToDashboard: Boolean) {
         disposable.add(
-            RxAnimation.sequentially(
-                RxAnimation.together(
+            Observable.fromCallable {
+                findNavController().graph.setStartDestination(com.openweatherdemo.R.id.dashboardFragment) // Little bit tricky solution :)
+                if (navigateToDashboard) {
+                    navigate(com.openweatherdemo.R.id.action_splashFragment_to_dashboardFragment)
+                } else {
+                    navigate(com.openweatherdemo.R.id.action_splashFragment_to_searchFragment)
+                }
+            }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe()
+            /*sequentially(
+                together(
                     binding.imageViewBottomDrawable.fadeOut(300L),
                     binding.imageViewBottomDrawable.translationY(100f),
                     binding.imageViewBottomDrawableShadow.fadeOut(300L),
                     binding.imageViewBottomDrawableShadow.translationY(100f)
                 ),
 
-                RxAnimation.together(
+                together(
                     binding.imageViewEllipse.fadeOut(300L),
                     binding.imageViewEllipse.translationY(500F, 300L)
                 ),
 
-                RxAnimation.together(
+                together(
                     binding.imageViewBigCloud.translationX(500f, 300L),
                     binding.imageViewSmallCloud.translationX(-500f, 300L)
                 ),
@@ -112,7 +142,7 @@ class SplashFragment : BaseFragment<SplashFragmentViewModel, FragmentSplashBindi
                 } else {
                     navigate(com.openweatherdemo.R.id.action_splashFragment_to_searchFragment)
                 }
-            }.subscribe()
+            }.subscribe()*/
 
         )
     }
@@ -122,10 +152,6 @@ class SplashFragment : BaseFragment<SplashFragmentViewModel, FragmentSplashBindi
         disposable.clear()
     }
 
-}
-
-private fun CompositeDisposable.add(subscribe: Disposable) {
-    subscribe.let { this.add(Disposable.disposed()) }
 }
 
 
