@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">OpenWeatherDemo</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="position" translatable="false">position</string>
+    <string name="title">Title</string>
+    <string name="explore">Explore</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="next_week">Next Week</string>
+    <string name="humidity">Humidity</string>
+    <string name="next_5_days">Next 5 Days</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="more">More</string>
+    <string name="about_app">About app</string>
+    <string name="search">Search</string>
+    <string name="start_typing">Start typing for find your location…</string>
+    <string name="about_app_full_text">OpenWeatherDemoApp is a simple forecast app, which uses some APIs to fetch 5 day / 3 hour forecast data from the OpenWeatherMap and to fetch places,cities,counties,coords etc. The main goal of this app is to be a sample of how to build an high quality Android application that uses the Architecture components, Dagger etc. in Kotlin.</string>
+    <string name="github_url">https://github.com/sumitanandd786/OpenWeatherDemo</string>
+    <string name="see_on_github">See on Github</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="unexpected_exception" />
+    <string name="ic_bigcloud">BigCloud</string>
+    <string name="ic_small_cloud">Small Cloud</string>
+    <string name="view_ellipse">View Ellipse</string>
+    <string name="bottom_shadow">Bottom Shadow</string>
+    <string name="bottom_drawable">Bottom Drawable</string>
+    <string name="main_cloud">Main Cloud</string>
+    <string name="view_github_txt">View Github</string>
+
+</resources>

@@ -1,0 +1,48 @@
+package com.openweatherdemo.ui.search
+
+import android.content.SharedPreferences
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.switchMap
+import com.openweatherdemo.core.BaseViewModel
+import com.openweatherdemo.core.Constants
+import com.openweatherdemo.db.entity.CoordEntity
+import com.openweatherdemo.domain.usecase.SearchCitiesUseCase
+import com.openweatherdemo.ui.search.SearchViewState
+import dagger.hilt.android.lifecycle.HiltViewModel
+import io.reactivex.Single
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers.mainThread
+import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
+
+@HiltViewModel
+class SearchViewModel @Inject internal constructor(
+    private val useCase: SearchCitiesUseCase,
+    private val pref: SharedPreferences
+) : BaseViewModel() {
+
+    private val _searchParams: MutableLiveData<SearchCitiesUseCase.SearchCitiesParams> = MutableLiveData()
+    fun getSearchViewState() = searchViewState
+
+    private val searchViewState: LiveData<SearchViewState> = _searchParams.switchMap { params ->
+        useCase.execute(params)
+    }
+
+    fun setSearchParams(params: SearchCitiesUseCase.SearchCitiesParams) {
+        if (_searchParams.value == params) {
+            return
+        }
+        _searchParams.postValue(params)
+    }
+
+    fun saveCoordsToSharedPref(coordEntity: CoordEntity): Single<String>? {
+        return Single.create<String> {
+            pref.edit().putString(Constants.Coords.LAT, coordEntity.lat.toString()).apply()
+            pref.edit().putString(Constants.Coords.LON, coordEntity.lon.toString()).apply()
+            it.onSuccess("")
+        }
+            .observeOn(mainThread())
+            .subscribeOn(Schedulers.io())
+    }
+}

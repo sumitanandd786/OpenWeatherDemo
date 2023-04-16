@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "984714645742",
+    "project_id": "sapient-helix-383816",
+    "storage_bucket": "sapient-helix-383816.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:984714645742:android:d1de8b0842ddaf480363ff",
+        "android_client_info": {
+          "package_name": "com.openweatherdemo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "984714645742-094c7h5usssodkmcr40f6j13bbd8cfl1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdOtE62vf-ikwwNzLh1SjPqL9KcaHqKr8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "984714645742-094c7h5usssodkmcr40f6j13bbd8cfl1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
